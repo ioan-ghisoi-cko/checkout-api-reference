@@ -65,11 +65,6 @@ properties:
     type: string
     example: pc_u2l6xz5joigedmk7g5vxzt7rqy
 
-  payment_type:
-    description: The type of payout this instrument is intended to be used for
-    type: string
-    example: ClientSettlements
-
   account_holder:
     $ref: "#/components/schemas/AccountHolder"
 
