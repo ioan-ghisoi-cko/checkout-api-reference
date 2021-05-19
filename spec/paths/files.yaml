@@ -3,6 +3,7 @@ post:
     - ApiSecretKey: []
   tags:
     - Disputes
+  x-nas-only: true
   summary: Upload file
   operationId: uploadFile
   description:

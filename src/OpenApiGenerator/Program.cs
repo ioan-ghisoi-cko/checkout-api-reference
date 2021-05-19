@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.OpenApi.Readers;
 using Microsoft.OpenApi.Writers;
-using System.Net.Http;
 using System.Text;
 
 namespace OpenApiGenerator
@@ -134,6 +133,7 @@ namespace OpenApiGenerator
 
             var yamlPathFiles = GetSpecFiles("paths", "*.yaml");
             var text = "paths:\n";
+            var nasOnly = false;
 
             foreach (var file in yamlPathFiles)
             {
@@ -145,10 +145,17 @@ namespace OpenApiGenerator
                     path = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf(".")).Replace("@", "/");
                     text += ($"  /{path}:\n");
 
+                    if (!File.ReadLines(file).Any(line => line == "x-nas-only: true")) {
+                        continue;
+                    }
+
                     var s = "";
                     var currentVerb = "";
+             
                     while ((s = sr.ReadLine()) != null)
                     {
+                        if(s == "x-nas-only: true") { nasOnly = true; }
+                        
                         if (httpVerbs.Contains($"{s.TrimEnd(':')}"))
                         {
                             if (!string.IsNullOrEmpty(currentVerb))
@@ -163,7 +170,9 @@ namespace OpenApiGenerator
                 }
             }
 
-            File.AppendAllText(_yamlOutputFile, text, Encoding.UTF8);
+            if(!nasOnly) {
+                File.AppendAllText(_yamlOutputFile, text, Encoding.UTF8);
+            }
         }
 
         static string GetCodeSampleText(string path, string verb)
@@ -171,7 +180,7 @@ namespace OpenApiGenerator
             var text = "";
             var codeSamples = GetCodeSample(path, verb);
 
-            if(!codeSamples.Any()) return text;
+            if (!codeSamples.Any()) return text;
 
             text += $"      x-code-samples:\n";
             foreach (var sample in codeSamples)

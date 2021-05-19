@@ -3,6 +3,7 @@ get:
     - ApiSecretKey: []
   tags:
     - Disputes
+  x-nas-only: true
   summary: Get disputes
   operationId: getDisputes
   description:

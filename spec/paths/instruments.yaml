@@ -3,6 +3,7 @@ post:
     - ApiSecretKey: []
   tags:
     - Instruments
+  x-nas-only: true
   summary: Create an instrument
   operationId: createAnInstrument
   description: |
