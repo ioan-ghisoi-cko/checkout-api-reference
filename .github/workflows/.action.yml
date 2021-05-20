@@ -1,0 +1,21 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ task/filter-endpoints ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Checkout Api Reference repository
+        uses: actions/checkout@v2
+        with:
+          repository: checkout/checkout-api-reference
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: src
+
+      - name: Build API Spec
+        run: |
+          npm ci
+          npm run build
